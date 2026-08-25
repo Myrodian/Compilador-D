@@ -1,0 +1,25 @@
+int Soma(int A, int B) {
+    int Resultado;
+    Resultado = A + 2;
+    return Resultado;
+}
+
+void Principal() {
+    int X = 10;
+    int Y = 20;
+    int Z;
+
+    Z = Soma(X, Y);
+
+    if (Z > 20) {
+        write(Z);
+    } elif (Z == 20) {
+        write(0);
+    } else {
+        write(1);
+    }
+
+    while (Z > 0) {
+        Z = Z - 1;
+    }
+}
