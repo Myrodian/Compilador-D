@@ -84,12 +84,21 @@ class Lexico:
 
                 elif simbolo == '!':
                     estado = 10
-                elif simbolo == '+':
-                    return (TOKEN.SOMA, simbolo, lin, col)
-                
-                elif simbolo == '-':
-                    return (TOKEN.SUBTRACAO, simbolo, lin, col)
-                
+                elif simbolo == '+': # pode ser soma ou incremento
+                    estado = 13
+
+                elif simbolo == '-': # pode ser subtração ou decremento
+                    estado = 14
+
+                elif simbolo == '[':
+                    return (TOKEN.ABRE_COLCHETES, simbolo, lin, col)
+
+                elif simbolo == ']':
+                    return (TOKEN.FECHA_COLCHETES, simbolo, lin, col)
+
+                elif simbolo == '&':
+                    return (TOKEN.REFERENCIA, simbolo, lin, col)
+
                 elif simbolo == '*':
                     return (TOKEN.MULTIPLICACAO, simbolo, lin, col)
                 
@@ -216,6 +225,22 @@ class Lexico:
                     return (TOKEN.DIFERENTE, lexema, lin, col)
                 else:
                     estado = 0 # não era diferente, erro
+
+            elif estado == 13:
+                if simbolo == '+':
+                    lexema += simbolo
+                    return (TOKEN.INCREMENTO, lexema, lin, col)
+                else:
+                    self.ungetchar(simbolo) # não era incremento, devolve o caractere
+                    return (TOKEN.SOMA, lexema, lin, col)
+
+            elif estado == 14:
+                if simbolo == '-':
+                    lexema += simbolo
+                    return (TOKEN.DECREMENTO, lexema, lin, col)
+                else:
+                    self.ungetchar(simbolo) # não era decremento, devolve o caractere
+                    return (TOKEN.SUBTRACAO, lexema, lin, col)
 
             elif estado == 0:
                 if simbolo == '.' or simbolo.isalpha() or simbolo.isdigit():
