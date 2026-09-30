@@ -1,3 +1,5 @@
+import os
+
 from ttoken import TOKEN
 
 class Lexico:
@@ -10,6 +12,7 @@ class Lexico:
         self.tokenLido = None
         self.linha = 1
         self.coluna = 0
+        self.arqLog = None
 
 
     def fimDoArquivo(self):
@@ -41,7 +44,16 @@ class Lexico:
     def imprimeToken(self, tokenCorrente):
         (token, lexema, linha, coluna) = tokenCorrente
         msg = TOKEN.msg(token)
-        print(f'(token = {msg}\t lex = "{lexema}" \t lin = {linha} col = {coluna})')
+        if self.arqLog is None:
+            # primeiro token da execucao: cria logs/<fonte>_tokens.log do zero
+            os.makedirs('logs', exist_ok=True)
+            nomeFonte = os.path.splitext(os.path.basename(self.arqFonte))[0]
+            self.arqLog = os.path.join('logs', f'{nomeFonte}_tokens.log')
+            modo = 'w'
+        else:
+            modo = 'a'
+        with open(self.arqLog, modo, encoding='utf-8') as log:
+            log.write(f'(token = {msg}\t lex = "{lexema}" \t lin = {linha} col = {coluna})\n')
 
     def getToken(self):
         estado = 1
@@ -264,3 +276,4 @@ if __name__ == '__main__':
         lexico.imprimeToken(token)
         token = lexico.getToken()
     lexico.imprimeToken(token)
+    print(f'Tokens gravados em {lexico.arqLog}')

@@ -6,7 +6,7 @@ int Soma(int A, int B) {
 
 void Principal() {
     int X = 10;
-    int Y = 20;
+    int Y = 20 = 21 + - 12;
     int Z;
 
     Z = Soma(X, Y);
